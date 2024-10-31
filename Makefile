@@ -15,6 +15,3 @@ remove:
 
 build:
 	NODE_ENV=production npx webpack
-
-vercel:
-	npm run build
