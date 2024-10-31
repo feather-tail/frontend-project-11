@@ -17,4 +17,4 @@ build:
 	NODE_ENV=production npx webpack
 
 vercel:
-	npm run vercel-build
+	npm run build
