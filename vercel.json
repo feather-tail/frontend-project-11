@@ -1,9 +1,16 @@
 {
-  "routes": [
+  "builds": [
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "src": "index.html",
+      "use": "@now/static"
+    },
+    {
+      "src": "src/styles.scss",
+      "use": "@now/static"
+    },
+    {
+      "src": "src/index.js",
+      "use": "@now/static"
     }
-  ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  ]
 }
