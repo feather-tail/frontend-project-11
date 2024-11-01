@@ -5,11 +5,11 @@
       "use": "@now/static"
     },
     {
-      "src": "src/styles.scss",
+      "src": "styles.scss",
       "use": "@now/static"
     },
     {
-      "src": "src/index.js",
+      "src": "index.js",
       "use": "@now/static"
     }
   ]
