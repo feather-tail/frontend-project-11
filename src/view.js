@@ -4,9 +4,9 @@ const initView = (state, elements) => {
   const renderForm = () => {
     const { form, input } = elements;
 
-    const existingFeedback = form.parentElement.querySelector(".feedback");
-    if (existingFeedback) {
-      existingFeedback.remove();
+    const existingError = form.parentElement.querySelector(".error-field");
+    if (existingError) {
+      existingError.remove();
     }
 
     if (state.form.status === "success") {
@@ -16,17 +16,17 @@ const initView = (state, elements) => {
     } else if (state.form.status === "error") {
       input.classList.add("is-invalid");
 
-      const feedback = document.createElement("p");
-      feedback.classList.add(
-        "feedback",
+      const errorField = document.createElement("p");
+      errorField.classList.add(
+        "error-field",
         "m-0",
         "position-absolute",
         "small",
         "text-danger"
       );
-      feedback.textContent = state.form.error;
+      errorField.textContent = state.form.error;
 
-      form.parentElement.appendChild(feedback);
+      form.parentElement.appendChild(errorField);
     }
   };
 
@@ -35,7 +35,7 @@ const initView = (state, elements) => {
       renderForm();
     }
   });
-
+  ыы;
   return watchedState;
 };
 
