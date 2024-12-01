@@ -1,41 +1,31 @@
 import onChange from "on-change";
 
-const initView = (state, elements) => {
+const initView = (state, elements, i18n) => {
   const renderForm = () => {
-    const { form, input } = elements;
+    const { input, feedback } = elements;
 
-    const existingError = form.parentElement.querySelector(".error-field");
-    if (existingError) {
-      existingError.remove();
-    }
+    feedback.classList.remove("text-danger", "text-success");
+    feedback.textContent = "";
 
     if (state.form.status === "success") {
       input.classList.remove("is-invalid");
       input.value = "";
       input.focus();
+      feedback.classList.add("text-success");
+      feedback.textContent = i18n.t("form.success");
     } else if (state.form.status === "error") {
       input.classList.add("is-invalid");
-
-      const errorField = document.createElement("p");
-      errorField.classList.add(
-        "error-field",
-        "m-0",
-        "position-absolute",
-        "small",
-        "text-danger"
-      );
-      errorField.textContent = state.form.error;
-
-      form.parentElement.appendChild(errorField);
+      feedback.classList.add("text-danger");
+      feedback.textContent = i18n.t(state.form.error);
     }
   };
 
   const watchedState = onChange(state, (path) => {
-    if (path.startsWith("form")) {
+    if (path === "form.status" || path === "form.error") {
       renderForm();
     }
   });
-  ыы;
+
   return watchedState;
 };
 
