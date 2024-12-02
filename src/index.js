@@ -56,20 +56,13 @@ const runApp = () => {
       const getProxyUrl = (url) =>
         `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
 
-      const updateFeeds = async () => {
-        try {
-          const promises = state.feeds.map(async (feed) => {
-            try {
-              const response = await axios.get(getProxyUrl(feed.url));
+      const updateFeeds = () => {
+        const promises = state.feeds.map((feed) => {
+          return axios
+            .get(getProxyUrl(feed.url))
+            .then((response) => {
               const { contents } = response.data;
               const { feed: newFeed, posts } = parseRSS(contents);
-
-              if (
-                newFeed.title !== feed.title ||
-                newFeed.description !== feed.description
-              ) {
-                console.warn(`Фид ${feed.url} изменился, обновление данных.`);
-              }
 
               const existingLinks = state.posts.map((post) => post.link);
               const newPosts = posts
@@ -81,22 +74,20 @@ const runApp = () => {
                 }));
 
               if (newPosts.length > 0) {
-                watchedState.posts.push(...newPosts);
+                watchedState.posts.unshift(...newPosts);
               }
-            } catch (err) {
+            })
+            .catch((err) => {
               console.error(`Ошибка обновления канала ${feed.url}:`, err);
-            }
-          });
+            });
+        });
 
-          await Promise.all(promises);
-          console.log("Обновление каналов завершено");
-        } catch (err) {
-          console.error("Ошибка при обновлении каналов:", err);
-        }
+        Promise.all(promises).finally(() => {
+          setTimeout(updateFeeds, 5000);
+        });
       };
 
-      const updateInterval = 5000;
-      setInterval(updateFeeds, updateInterval);
+      setTimeout(updateFeeds, 5000);
 
       elements.form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -133,9 +124,8 @@ const runApp = () => {
                   id: uniqueId(),
                   feedId: feedWithId.id,
                 }));
-                watchedState.posts.push(...postsWithId);
+                watchedState.posts.unshift(...postsWithId);
 
-                watchedState.form.status = "success";
                 watchedState.form.status = "success";
               })
               .catch((err) => {
