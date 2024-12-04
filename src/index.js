@@ -35,6 +35,11 @@ const runApp = () => {
         feedback: document.querySelector(".feedback"),
         feedsContainer: document.querySelector(".feeds"),
         postsContainer: document.querySelector(".posts"),
+        modal: {
+          title: document.querySelector(".modal-title"),
+          body: document.querySelector(".modal-body"),
+          fullArticleLink: document.querySelector(".full-article"),
+        },
       };
 
       const state = {
@@ -44,6 +49,12 @@ const runApp = () => {
         },
         feeds: [],
         posts: [],
+        uiState: {
+          readPosts: new Set(),
+          modal: {
+            postId: null,
+          },
+        },
       };
 
       const watchedState = initView(state, elements, i18n);
@@ -56,31 +67,33 @@ const runApp = () => {
       const getProxyUrl = (url) =>
         `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
 
+      const updatePosts = (feed) => {
+        return axios
+          .get(getProxyUrl(feed.url))
+          .then((response) => {
+            const { contents } = response.data;
+            const { posts } = parseRSS(contents);
+
+            const existingLinks = state.posts.map((post) => post.link);
+            const newPosts = posts
+              .filter((post) => !existingLinks.includes(post.link))
+              .map((post) => ({
+                ...post,
+                id: uniqueId(),
+                feedId: feed.id,
+              }));
+
+            if (newPosts.length > 0) {
+              watchedState.posts.unshift(...newPosts);
+            }
+          })
+          .catch((err) => {
+            console.error(`Ошибка обновления канала ${feed.url}:`, err);
+          });
+      };
+
       const updateFeeds = () => {
-        const promises = state.feeds.map((feed) => {
-          return axios
-            .get(getProxyUrl(feed.url))
-            .then((response) => {
-              const { contents } = response.data;
-              const { feed: newFeed, posts } = parseRSS(contents);
-
-              const existingLinks = state.posts.map((post) => post.link);
-              const newPosts = posts
-                .filter((post) => !existingLinks.includes(post.link))
-                .map((post) => ({
-                  ...post,
-                  id: uniqueId(),
-                  feedId: feed.id,
-                }));
-
-              if (newPosts.length > 0) {
-                watchedState.posts.unshift(...newPosts);
-              }
-            })
-            .catch((err) => {
-              console.error(`Ошибка обновления канала ${feed.url}:`, err);
-            });
-        });
+        const promises = state.feeds.map((feed) => updatePosts(feed));
 
         Promise.all(promises).finally(() => {
           setTimeout(updateFeeds, 5000);

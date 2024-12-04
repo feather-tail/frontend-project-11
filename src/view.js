@@ -1,4 +1,5 @@
 import onChange from "on-change";
+import { Modal } from "bootstrap";
 
 const renderFeeds = (feedsContainer, feeds) => {
   feedsContainer.innerHTML = "";
@@ -28,7 +29,8 @@ const renderFeeds = (feedsContainer, feeds) => {
   feedsContainer.appendChild(ul);
 };
 
-const renderPosts = (postsContainer, posts) => {
+const renderPosts = (state, elements, watchedState) => {
+  const { postsContainer } = elements;
   postsContainer.innerHTML = "";
 
   const postsTitle = document.createElement("h2");
@@ -38,7 +40,7 @@ const renderPosts = (postsContainer, posts) => {
   const ul = document.createElement("ul");
   ul.classList.add("list-group");
 
-  posts.forEach((post) => {
+  state.posts.forEach((post) => {
     const li = document.createElement("li");
     li.classList.add(
       "list-group-item",
@@ -52,16 +54,54 @@ const renderPosts = (postsContainer, posts) => {
     a.textContent = post.title;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
+    a.dataset.id = post.id;
+
+    const isRead = state.uiState.readPosts.has(post.id);
+    a.classList.add(isRead ? "fw-normal" : "fw-bold");
+
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      watchedState.uiState.readPosts.add(post.id);
+      watchedState.uiState.modal.postId = post.id;
+    });
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("btn", "btn-primary", "btn-sm");
+    button.textContent = "Просмотр";
+    button.dataset.id = post.id;
+
+    button.addEventListener("click", () => {
+      watchedState.uiState.readPosts.add(post.id);
+      watchedState.uiState.modal.postId = post.id;
+
+      const modalElement = document.querySelector("#modal");
+      const modal = new Modal(modalElement);
+      modal.show();
+    });
 
     li.appendChild(a);
+    li.appendChild(button);
     ul.appendChild(li);
   });
 
   postsContainer.appendChild(ul);
 };
 
+const renderModal = (state, elements) => {
+  const { modal } = elements;
+  const postId = state.uiState.modal.postId;
+  const post = state.posts.find((p) => p.id === postId);
+
+  if (post) {
+    modal.title.textContent = post.title;
+    modal.body.textContent = post.description;
+    modal.fullArticleLink.href = post.link;
+  }
+};
+
 const initView = (state, elements, i18n) => {
-  const { form, input, feedback, feedsContainer, postsContainer } = elements;
+  const { input, feedback, feedsContainer, postsContainer } = elements;
 
   const renderForm = () => {
     feedback.classList.remove("text-danger", "text-success");
@@ -86,25 +126,21 @@ const initView = (state, elements, i18n) => {
     }
   };
 
-  const renderFeedsList = () => {
-    renderFeeds(feedsContainer, state.feeds);
-  };
-
-  const renderPostsList = () => {
-    renderPosts(postsContainer, state.posts);
-  };
-
   const watchedState = onChange(state, (path) => {
     if (path === "form.status" || path === "form.error") {
       renderForm();
     }
 
     if (path === "feeds") {
-      renderFeedsList();
+      renderFeeds(feedsContainer, state.feeds);
     }
 
-    if (path === "posts") {
-      renderPostsList();
+    if (path.startsWith("posts") || path.startsWith("uiState.readPosts")) {
+      renderPosts(state, elements, watchedState);
+    }
+
+    if (path === "uiState.modal.postId") {
+      renderModal(state, elements);
     }
   });
 

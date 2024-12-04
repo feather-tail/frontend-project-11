@@ -36,11 +36,17 @@ export default (rssContent) => {
   const posts = Array.from(items).map((item) => {
     const titleElement = item.querySelector("title");
     const linkElement = item.querySelector("link");
+    const descriptionElement = item.querySelector("description");
 
-    const title = titleElement ? titleElement.textContent : "Без названия";
-    const link = linkElement ? linkElement.textContent : "#";
+    const title = titleElement
+      ? titleElement.textContent.trim()
+      : "Без названия";
+    const link = linkElement ? linkElement.textContent.trim() : "#";
+    const description = descriptionElement
+      ? descriptionElement.textContent.trim()
+      : "";
 
-    return { title, link };
+    return { title, link, description };
   });
 
   return { feed, posts };
