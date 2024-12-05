@@ -63,6 +63,7 @@ const renderModal = (state, elements) => {
 
   modalElement.addEventListener("hidden.bs.modal", () => {
     modalElement.remove();
+    state.uiState.modal.postId = null;
   });
 };
 

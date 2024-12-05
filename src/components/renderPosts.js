@@ -32,12 +32,6 @@ const renderPosts = (state, elements, watchedState) => {
     const isRead = uiState.readPosts.has(post.id);
     a.classList.add(isRead ? "fw-normal" : "fw-bold");
 
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      watchedState.uiState.readPosts.add(post.id);
-      watchedState.uiState.modal.postId = post.id;
-    });
-
     const button = document.createElement("button");
     button.type = "button";
     button.classList.add("btn", "btn-primary", "btn-sm");
