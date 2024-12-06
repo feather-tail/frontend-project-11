@@ -1,4 +1,4 @@
-import * as yup from "yup";
+import * as yup from 'yup';
 
 const buildSchema = (existingUrls) =>
   yup.object().shape({

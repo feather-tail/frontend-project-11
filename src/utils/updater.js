@@ -1,7 +1,7 @@
-import axios from "axios";
-import { uniqueId } from "lodash";
-import parseRSS from "../utils/parser.js";
-import getProxyUrl from "./utils.js";
+import axios from 'axios';
+import { uniqueId } from 'lodash';
+import parseRSS from '../utils/parser.js';
+import getProxyUrl from './utils.js';
 
 export const updatePosts = (feed, state, watchedState) =>
   axios

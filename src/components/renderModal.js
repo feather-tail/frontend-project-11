@@ -1,4 +1,4 @@
-import { Modal } from "bootstrap";
+import { Modal } from 'bootstrap';
 
 const renderModal = (state, elements) => {
   const { modalContainer } = elements;
@@ -8,17 +8,17 @@ const renderModal = (state, elements) => {
 
   if (!post) return;
 
-  const existingModal = document.querySelector(".modal");
+  const existingModal = document.querySelector('.modal');
   if (existingModal) {
     existingModal.remove();
   }
 
-  const modalElement = document.createElement("div");
-  modalElement.classList.add("modal", "fade");
-  modalElement.id = "modal";
-  modalElement.tabIndex = "-1";
-  modalElement.setAttribute("aria-labelledby", "modal-title");
-  modalElement.setAttribute("aria-hidden", "true");
+  const modalElement = document.createElement('div');
+  modalElement.classList.add('modal', 'fade');
+  modalElement.id = 'modal';
+  modalElement.tabIndex = '-1';
+  modalElement.setAttribute('aria-labelledby', 'modal-title');
+  modalElement.setAttribute('aria-hidden', 'true');
 
   modalElement.innerHTML = `
     <div class="modal-dialog">
@@ -61,7 +61,7 @@ const renderModal = (state, elements) => {
   const modal = new Modal(modalElement);
   modal.show();
 
-  modalElement.addEventListener("hidden.bs.modal", () => {
+  modalElement.addEventListener('hidden.bs.modal', () => {
     modalElement.remove();
     state.uiState.modal.postId = null;
   });

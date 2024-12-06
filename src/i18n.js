@@ -1,11 +1,11 @@
-import i18next from "i18next";
-import ru from "./locales/ru.js";
+import i18next from 'i18next';
+import ru from './locales/ru.js';
 
 const initI18n = () => {
   const i18nInstance = i18next.createInstance();
   return i18nInstance
     .init({
-      lng: "ru",
+      lng: 'ru',
       debug: false,
       resources: { ru },
     })
