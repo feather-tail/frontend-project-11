@@ -1,41 +1,41 @@
-import path from "path";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import WorkboxWebpackPlugin from "workbox-webpack-plugin";
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import WorkboxWebpackPlugin from 'workbox-webpack-plugin';
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 const config = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    path: path.resolve(new URL(".", import.meta.url).pathname, "dist"),
+    path: path.resolve(new URL('.', import.meta.url).pathname, 'dist'),
   },
   devServer: {
     open: true,
-    host: "localhost",
+    host: 'localhost',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "index.html",
+      template: 'index.html',
     }),
   ],
   module: {
     rules: [
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: "asset",
+        type: 'asset',
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.scss$/,
         use: [
-          "style-loader",
-          "css-loader",
-          "postcss-loader",
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
               sourceMap: true,
               sassOptions: {
@@ -51,10 +51,10 @@ const config = {
 
 export default () => {
   if (isProduction) {
-    config.mode = "production";
+    config.mode = 'production';
     config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
   } else {
-    config.mode = "development";
+    config.mode = 'development';
   }
   return config;
 };
