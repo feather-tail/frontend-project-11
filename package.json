@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@eslint/plugin-kit": "^0.2.3",
+    "@npmcli/fs": "^4.0.0",
     "axios": "^1.7.8",
     "bootstrap": "^5.3.3",
     "cross-spawn": "^7.0.6",
