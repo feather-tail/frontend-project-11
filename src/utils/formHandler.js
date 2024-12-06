@@ -13,8 +13,12 @@ const handleFormSubmit = (event, state, watchedState, elements) => {
   schema
     .validate({ url }, { abortEarly: false })
     .then(() => {
-      watchedState.form.status = 'loading';
-      watchedState.form.error = null;
+      const updatedForm = {
+        ...watchedState.form,
+        status: 'loading',
+        error: null,
+      };
+      watchedState.form = updatedForm;
 
       return axios
         .get(getProxyUrl(url))
@@ -27,31 +31,41 @@ const handleFormSubmit = (event, state, watchedState, elements) => {
             id: uniqueId(),
             url,
           };
-          watchedState.feeds.push(feedWithId);
+
+          const updatedFeeds = [...watchedState.feeds, feedWithId];
+          watchedState.feeds = updatedFeeds;
 
           const postsWithId = posts.map((post) => ({
             ...post,
             id: uniqueId(),
             feedId: feedWithId.id,
           }));
-          watchedState.posts.unshift(...postsWithId);
 
-          watchedState.form.status = 'success';
+          const updatedPosts = [...postsWithId, ...watchedState.posts];
+          watchedState.posts = updatedPosts;
+
+          const successForm = { ...watchedState.form, status: 'success' };
+          watchedState.form = successForm;
         })
         .catch((err) => {
-          watchedState.form.status = 'error';
+          const errorForm = { ...watchedState.form, status: 'error' };
           if (err.isParsingError) {
-            watchedState.form.error = 'form.errors.notValidRss';
+            errorForm.error = 'form.errors.notValidRss';
           } else if (err.isAxiosError) {
-            watchedState.form.error = 'form.errors.network';
+            errorForm.error = 'form.errors.network';
           } else {
-            watchedState.form.error = 'form.errors.unknown';
+            errorForm.error = 'form.errors.unknown';
           }
+          watchedState.form = errorForm;
         });
     })
     .catch((err) => {
-      watchedState.form.status = 'error';
-      watchedState.form.error = err.errors[0];
+      const errorForm = {
+        ...watchedState.form,
+        status: 'error',
+        error: err.errors[0],
+      };
+      watchedState.form = errorForm;
     });
 };
 
