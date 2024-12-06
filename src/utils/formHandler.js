@@ -13,12 +13,8 @@ const handleFormSubmit = (event, state, watchedState, elements) => {
   schema
     .validate({ url }, { abortEarly: false })
     .then(() => {
-      const updatedForm = {
-        ...watchedState.form,
-        status: 'loading',
-        error: null,
-      };
-      watchedState.form = updatedForm;
+      watchedState.form.status = 'loading';
+      watchedState.form.error = null;
 
       return axios
         .get(getProxyUrl(url))
@@ -31,41 +27,31 @@ const handleFormSubmit = (event, state, watchedState, elements) => {
             id: uniqueId(),
             url,
           };
-
-          const updatedFeeds = [...watchedState.feeds, feedWithId];
-          watchedState.feeds = updatedFeeds;
+          watchedState.feeds.push(feedWithId);
 
           const postsWithId = posts.map((post) => ({
             ...post,
             id: uniqueId(),
             feedId: feedWithId.id,
           }));
+          watchedState.posts.unshift(...postsWithId);
 
-          const updatedPosts = [...postsWithId, ...watchedState.posts];
-          watchedState.posts = updatedPosts;
-
-          const successForm = { ...watchedState.form, status: 'success' };
-          watchedState.form = successForm;
+          watchedState.form.status = 'success';
         })
         .catch((err) => {
-          const errorForm = { ...watchedState.form, status: 'error' };
+          watchedState.form.status = 'error';
           if (err.isParsingError) {
-            errorForm.error = 'form.errors.notValidRss';
+            watchedState.form.error = 'form.errors.notValidRss';
           } else if (err.isAxiosError) {
-            errorForm.error = 'form.errors.network';
+            watchedState.form.error = 'form.errors.network';
           } else {
-            errorForm.error = 'form.errors.unknown';
+            watchedState.form.error = 'form.errors.unknown';
           }
-          watchedState.form = errorForm;
         });
     })
     .catch((err) => {
-      const errorForm = {
-        ...watchedState.form,
-        status: 'error',
-        error: err.errors[0],
-      };
-      watchedState.form = errorForm;
+      watchedState.form.status = 'error';
+      watchedState.form.error = err.errors[0];
     });
 };
 
