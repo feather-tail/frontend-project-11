@@ -4,7 +4,7 @@ import parseRSS from './parser.js';
 import buildSchema from './schema.js';
 import getProxyUrl from './utils.js';
 
-const handleFormSubmit = (event, stateArg, watchedStateArg, elements, i18n) => {
+const handleFormSubmit = (event, stateArg, watchedStateArg, elements) => {
   const state = stateArg;
   const watchedState = watchedStateArg;
 
@@ -53,7 +53,8 @@ const handleFormSubmit = (event, stateArg, watchedStateArg, elements, i18n) => {
     })
     .catch((err) => {
       watchedState.form.status = 'error';
-      watchedState.form.error = err.errors[0];
+      const [firstError] = err.errors;
+      watchedState.form.error = firstError;
     });
 };
 
