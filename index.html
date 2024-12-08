@@ -13,36 +13,38 @@
     />
   </head>
   <body>
-    <div class="container">
-      <form action="" class="rss-form text-body position-relative">
-        <div class="row">
-          <div class="col">
-            <div class="form-floating">
-              <input
-                id="url-input"
-                autofocus=""
-                required=""
-                name="url"
-                aria-label="url"
-                class="form-control w-100"
-                placeholder="ссылка RSS"
-                autocomplete="off"
-              />
-              <label for="url-input">Ссылка RSS</label>
-            </div>
-          </div>
-          <div class="col-auto">
-            <button
-              type="submit"
-              aria-label="add"
-              class="h-100 btn btn-lg btn-primary px-sm-5"
-            >
-              Добавить в ленту
-            </button>
+    <form action="" class="rss-form text-body position-relative">
+    <h1>RSS агрегатор</h1>
+      <div class="row">
+        <div class="col">
+          <div class="form-floating">
+            <input
+              id="url-input"
+              autofocus=""
+              required=""
+              name="url"
+              aria-label="url"
+              class="form-control w-100"
+              placeholder="ссылка RSS"
+              autocomplete="off"
+            />
+            <label for="url-input">Ссылка RSS</label>
           </div>
         </div>
-        <p class="feedback m-0 position-absolute small"></p>
-      </form>
+        <div class="col-auto">
+          <button
+            type="submit"
+            aria-label="add"
+            class="h-100 btn btn-lg btn-primary px-sm-5"
+          >
+            Добавить в ленту
+          </button>
+        </div>
+      </div>
+      <p class="feedback m-0 position-absolute small"></p>
+    </form>
+    <div class="container">        
+    </div>
       <div class="container-fluid mt-4">
         <div class="row">
           <div class="col-md-6 feeds"></div>
