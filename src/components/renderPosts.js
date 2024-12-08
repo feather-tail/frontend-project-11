@@ -22,7 +22,7 @@ const renderPosts = (stateArg, elementsArg, watchedStateArg) => {
       'list-group-item',
       'd-flex',
       'justify-content-between',
-      'align-items-start'
+      'align-items-start',
     );
 
     const a = document.createElement('a');

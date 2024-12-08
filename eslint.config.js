@@ -30,10 +30,15 @@ export default [
         fetch: 'readonly',
       },
     },
+    plugins: ['prettier'],
     rules: {
       'no-unused-vars': 'warn',
       'no-undef': 'warn',
       'no-console': 'off',
+      'comma-dangle': ['error', 'always-multiline'],
+      'implicit-arrow-linebreak': ['error', 'beside'],
+      'function-paren-newline': ['error', 'multiline'],
+      'prettier/prettier': 'error',
     },
   },
 ];

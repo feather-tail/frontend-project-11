@@ -30,11 +30,7 @@ export const updatePosts = (feed, stateArg, watchedStateArg) => {
 export const updateFeeds = (stateArg, watchedStateArg) => {
   const state = stateArg;
   const watchedState = watchedStateArg;
-  const promises = state.feeds.map((feed) =>
-    updatePosts(feed, state, watchedState)
-  );
+  const promises = state.feeds.map((feed) => updatePosts(feed, state, watchedState));
 
-  Promise.all(promises).finally(() => {
-    setTimeout(() => updateFeeds(state, watchedState), 5000);
-  });
+  Promise.all(promises).finally(() => setTimeout(() => updateFeeds(state, watchedState), 5000));
 };
