@@ -52,6 +52,14 @@ const renderPosts = (stateArg, elementsArg, watchedStateArg) => {
   });
 
   postsContainer.appendChild(ul);
+
+  postsContainer.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.tagName === 'A' && target.dataset.id) {
+      const postId = target.dataset.id;
+      watchedState.uiState.readPosts.add(postId);
+    }
+  });
 };
 
 export default renderPosts;
