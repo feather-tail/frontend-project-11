@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { uniqueId } from 'lodash';
-import parseRSS from '../utils/parser.js';
+import parseRSS from './parser.js';
 import getProxyUrl from './utils.js';
 
-export const updatePosts = (feed, state, watchedState) =>
-  axios
+export const updatePosts = (feed, stateArg, watchedStateArg) => {
+  const state = stateArg;
+  const watchedState = watchedStateArg;
+
+  return axios
     .get(getProxyUrl(feed.url))
     .then((response) => {
       const { contents } = response.data;
@@ -22,8 +25,11 @@ export const updatePosts = (feed, state, watchedState) =>
     .catch((err) => {
       console.error(`Ошибка обновления канала ${feed.url}:`, err);
     });
+};
 
-export const updateFeeds = (state, watchedState) => {
+export const updateFeeds = (stateArg, watchedStateArg) => {
+  const state = stateArg;
+  const watchedState = watchedStateArg;
   const promises = state.feeds.map((feed) =>
     updatePosts(feed, state, watchedState)
   );

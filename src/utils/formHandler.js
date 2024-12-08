@@ -4,10 +4,12 @@ import parseRSS from './parser.js';
 import buildSchema from './schema.js';
 import getProxyUrl from './utils.js';
 
-const handleFormSubmit = (event, state, watchedState, elements) => {
+const handleFormSubmit = (event, stateArg, watchedStateArg, elements, i18n) => {
+  const state = stateArg;
+  const watchedState = watchedStateArg;
+
   const formData = new FormData(elements.form);
   const url = formData.get('url').trim();
-
   const schema = buildSchema(state.feeds.map((feed) => feed.url));
 
   schema

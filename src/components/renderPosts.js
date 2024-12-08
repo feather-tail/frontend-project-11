@@ -1,7 +1,10 @@
-const renderPosts = (state, elements, watchedState) => {
+const renderPosts = (stateArg, elementsArg, watchedStateArg) => {
+  const state = stateArg;
+  const elements = elementsArg;
+  const watchedState = watchedStateArg;
+
   const { postsContainer } = elements;
   const { posts, uiState } = state;
-
   postsContainer.innerHTML = '';
 
   if (posts.length === 0) return;

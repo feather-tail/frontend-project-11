@@ -1,11 +1,12 @@
 import { Modal } from 'bootstrap';
 
-const renderModal = (state, elements) => {
-  const { modalContainer } = elements;
+const renderModal = (stateArg, elementsArg) => {
+  const state = stateArg;
+  const { modalContainer } = elementsArg;
   const { posts, uiState } = state;
-  const postId = uiState.modal.postId;
-  const post = posts.find((p) => p.id === postId);
+  const { postId } = uiState.modal;
 
+  const post = posts.find((p) => p.id === postId);
   if (!post) return;
 
   const existingModal = document.querySelector('.modal');
@@ -63,7 +64,11 @@ const renderModal = (state, elements) => {
 
   modalElement.addEventListener('hidden.bs.modal', () => {
     modalElement.remove();
-    state.uiState.modal.postId = null;
+    const newUiState = {
+      ...uiState,
+      modal: { ...uiState.modal, postId: null },
+    };
+    state.uiState = newUiState;
   });
 };
 
