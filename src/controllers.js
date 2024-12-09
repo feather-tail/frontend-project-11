@@ -4,7 +4,7 @@ const initControllers = (state, watchedState, elements) => {
   const { postsContainer } = elements;
 
   const { uiState } = watchedState;
-  
+
   postsContainer.addEventListener('click', (event) => {
     const { target } = event;
     const { id } = target.dataset;
