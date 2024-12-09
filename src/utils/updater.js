@@ -19,7 +19,8 @@ export const updatePosts = (feed, stateArg, watchedStateArg) => {
         .map((post) => ({ ...post, id: uniqueId(), feedId: feed.id }));
 
       if (newPosts.length > 0) {
-        watchedState.posts.unshift(...newPosts);
+        const { posts: watchedPosts } = watchedState;
+        watchedPosts.unshift(...newPosts);
       }
     })
     .catch((err) => {

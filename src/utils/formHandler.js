@@ -4,7 +4,7 @@ import parseRSS from './parser.js';
 import buildSchema from './schema.js';
 import getProxyUrl from './utils.js';
 
-const handleFormSubmit = (event, state, watchedState, elements, i18n) => {
+const handleFormSubmit = (event, state, watchedState, elements) => {
   const formData = new FormData(elements.form);
   const url = formData.get('url').trim();
   const schema = buildSchema(state.feeds.map((feed) => feed.url));
@@ -12,46 +12,48 @@ const handleFormSubmit = (event, state, watchedState, elements, i18n) => {
   schema
     .validate({ url }, { abortEarly: false })
     .then(() => {
-      watchedState.form.status = 'loading';
-      watchedState.form.error = null;
+      const { form, feeds, posts } = watchedState;
+      form.status = 'loading';
+      form.error = null;
 
       return axios
         .get(getProxyUrl(url))
         .then((response) => {
           const { contents } = response.data;
-          const { feed, posts } = parseRSS(contents);
+          const { feed, posts: newPosts } = parseRSS(contents);
 
           const feedWithId = {
             ...feed,
             id: uniqueId(),
             url,
           };
-          watchedState.feeds.push(feedWithId);
+          feeds.push(feedWithId);
 
-          const postsWithId = posts.map((post) => ({
+          const postsWithId = newPosts.map((post) => ({
             ...post,
             id: uniqueId(),
             feedId: feedWithId.id,
           }));
-          watchedState.posts.unshift(...postsWithId);
+          posts.unshift(...postsWithId);
 
-          watchedState.form.status = 'success';
+          form.status = 'success';
         })
         .catch((err) => {
-          watchedState.form.status = 'error';
+          form.status = 'error';
           if (err.isParsingError) {
-            watchedState.form.error = 'form.errors.notValidRss';
+            form.error = 'form.errors.notValidRss';
           } else if (err.isAxiosError) {
-            watchedState.form.error = 'form.errors.network';
+            form.error = 'form.errors.network';
           } else {
-            watchedState.form.error = 'form.errors.unknown';
+            form.error = 'form.errors.unknown';
           }
         });
     })
     .catch((err) => {
-      watchedState.form.status = 'error';
+      const { form } = watchedState;
+      form.status = 'error';
       const [firstError] = err.errors;
-      watchedState.form.error = firstError;
+      form.error = firstError;
     });
 };
 

@@ -1,20 +1,22 @@
 import { Modal } from 'bootstrap';
 
-const initControllers = (state, watchedState, elements, i18n) => {
+const initControllers = (state, watchedState, elements) => {
   const { postsContainer } = elements;
 
+  const { uiState } = watchedState;
+  
   postsContainer.addEventListener('click', (event) => {
     const { target } = event;
-    if (!target.dataset.id) return;
+    const { id } = target.dataset;
+    if (!id) return;
 
-    const postId = target.dataset.id;
     if (target.tagName === 'A') {
-      watchedState.uiState.readPosts.add(postId);
+      uiState.readPosts.add(id);
     }
 
     if (target.tagName === 'BUTTON') {
-      watchedState.uiState.readPosts.add(postId);
-      watchedState.uiState.modal.postId = postId;
+      uiState.readPosts.add(id);
+      uiState.modal.postId = id;
       const modalElement = document.querySelector('#modal');
       if (modalElement) {
         const modal = Modal.getOrCreateInstance(modalElement);
@@ -26,7 +28,7 @@ const initControllers = (state, watchedState, elements, i18n) => {
   document.body.addEventListener('hidden.bs.modal', (event) => {
     const modalElement = event.target;
     if (modalElement && modalElement.id === 'modal') {
-      watchedState.uiState.modal.postId = null;
+      uiState.modal.postId = null;
     }
   });
 };
