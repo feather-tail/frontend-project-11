@@ -1,74 +1,19 @@
-import { Modal } from 'bootstrap';
-
-const renderModal = (stateArg, elementsArg) => {
-  const state = stateArg;
-  const { modalContainer } = elementsArg;
-  const { posts, uiState } = state;
+const renderModal = (state, elements, i18n) => {
+  const { modalContainer } = elements;
+  const { uiState, posts } = state;
   const { postId } = uiState.modal;
-
   const post = posts.find((p) => p.id === postId);
-  if (!post) return;
 
-  const existingModal = document.querySelector('.modal');
-  if (existingModal) {
-    existingModal.remove();
-  }
+  modalContainer.querySelector('.modal-title').textContent = post.title;
+  modalContainer.querySelector('.modal-body').textContent = post.description;
 
-  const modalElement = document.createElement('div');
-  modalElement.classList.add('modal', 'fade');
-  modalElement.id = 'modal';
-  modalElement.tabIndex = '-1';
-  modalElement.setAttribute('aria-labelledby', 'modal-title');
-  modalElement.setAttribute('aria-hidden', 'true');
+  const fullLink = modalContainer.querySelector('.full-article-link');
+  fullLink.href = post.link;
+  fullLink.textContent = i18n.t('modal.readFull');
 
-  modalElement.innerHTML = `
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modal-title">${post.title}</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Закрыть"
-          ></button>
-        </div>
-        <div class="modal-body">
-          ${post.description}
-        </div>
-        <div class="modal-footer">
-          <a
-            href="${post.link}"
-            class="btn btn-primary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Читать полностью
-          </a>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Закрыть
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  modalContainer.appendChild(modalElement);
-
-  const modal = new Modal(modalElement);
-  modal.show();
-
-  modalElement.addEventListener('hidden.bs.modal', () => {
-    modalElement.remove();
-    const newUiState = {
-      ...uiState,
-      modal: { ...uiState.modal, postId: null },
-    };
-    state.uiState = newUiState;
+  const closeButtons = modalContainer.querySelectorAll('[data-bs-dismiss="modal"]');
+  closeButtons.forEach((btn) => {
+    btn.textContent = i18n.t('modal.close');
   });
 };
 

@@ -5,7 +5,7 @@ const renderFeeds = (feedsContainerArg, feeds) => {
   if (feeds.length === 0) return;
 
   const feedsTitle = document.createElement('h2');
-  feedsTitle.textContent = 'Фиды';
+  feedsTitle.textContent = i18n.t('feeds.title');
   feedsContainer.appendChild(feedsTitle);
 
   const ul = document.createElement('ul');

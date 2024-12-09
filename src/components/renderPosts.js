@@ -1,4 +1,4 @@
-const renderPosts = (stateArg, elementsArg, watchedStateArg) => {
+const renderPosts = (stateArg, elementsArg, watchedStateArg, i18n) => {
   const state = stateArg;
   const elements = elementsArg;
   const watchedState = watchedStateArg;
@@ -10,7 +10,7 @@ const renderPosts = (stateArg, elementsArg, watchedStateArg) => {
   if (posts.length === 0) return;
 
   const postsTitle = document.createElement('h2');
-  postsTitle.textContent = 'Посты';
+  postsTitle.textContent = i18n.t('posts.title');
   postsContainer.appendChild(postsTitle);
 
   const ul = document.createElement('ul');
@@ -38,13 +38,8 @@ const renderPosts = (stateArg, elementsArg, watchedStateArg) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.classList.add('btn', 'btn-primary', 'btn-sm');
-    button.textContent = 'Просмотр';
+    button.textContent = i18n.t('posts.viewButton');
     button.dataset.id = post.id;
-
-    button.addEventListener('click', () => {
-      watchedState.uiState.readPosts.add(post.id);
-      watchedState.uiState.modal.postId = post.id;
-    });
 
     li.appendChild(a);
     li.appendChild(button);
@@ -52,14 +47,6 @@ const renderPosts = (stateArg, elementsArg, watchedStateArg) => {
   });
 
   postsContainer.appendChild(ul);
-
-  postsContainer.addEventListener('click', (event) => {
-    const { target } = event;
-    if (target.tagName === 'A' && target.dataset.id) {
-      const postId = target.dataset.id;
-      watchedState.uiState.readPosts.add(postId);
-    }
-  });
 };
 
 export default renderPosts;

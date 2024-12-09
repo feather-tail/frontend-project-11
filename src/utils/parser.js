@@ -40,7 +40,7 @@ export default (rssContent) => {
 
     const title = titleElement
       ? titleElement.textContent.trim()
-      : 'Без названия';
+      : i18n.t('posts.noTitle');
     const link = linkElement ? linkElement.textContent.trim() : '#';
     const description = descriptionElement
       ? descriptionElement.textContent.trim()
