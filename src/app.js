@@ -50,6 +50,7 @@ const app = () => {
     const watchedState = initView(state, elements, i18n);
 
     elements.form.addEventListener('submit', (e) => {
+      e.preventDefault();
       handleFormSubmit(e, state, watchedState, elements, i18n);
     });
 

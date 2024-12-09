@@ -1,4 +1,4 @@
-const renderFeeds = (feedsContainerArg, feeds) => {
+const renderFeeds = (feedsContainerArg, feeds, i18n) => {
   const feedsContainer = feedsContainerArg;
   feedsContainer.innerHTML = '';
 

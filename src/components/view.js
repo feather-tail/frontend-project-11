@@ -38,15 +38,15 @@ const initView = (state, elements, i18n) => {
         break;
 
       case path === 'feeds':
-        renderFeeds(elements.feedsContainer, state.feeds);
+        renderFeeds(elements.feedsContainer, state.feeds, i18n);
         break;
 
       case path.startsWith('posts') || path.startsWith('uiState.readPosts'):
-        renderPosts(state, elements, watchedState);
+        renderPosts(state, elements, watchedState, i18n);
         break;
 
       case path === 'uiState.modal.postId':
-        renderModal(state, elements);
+        renderModal(state, elements, i18n);
         break;
 
       default:
