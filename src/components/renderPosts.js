@@ -1,7 +1,6 @@
 const renderPosts = (stateArg, elementsArg, watchedStateArg, i18n) => {
   const state = stateArg;
   const elements = elementsArg;
-  const watchedState = watchedStateArg;
 
   const { postsContainer } = elements;
   const { posts, uiState } = state;

@@ -3,7 +3,7 @@ import initI18n from './i18n.js';
 import initView from './components/view.js';
 import { updateFeeds } from './utils/updater.js';
 import handleFormSubmit from './utils/formHandler.js';
-import initEvents from './controllers/eventsController.js';
+import initControllers from './controllers.js';
 
 const app = () => {
   initI18n().then((i18n) => {
@@ -26,12 +26,6 @@ const app = () => {
       modalContainer: document.body,
     };
 
-    const addFeedButton = elements.form.querySelector('button[aria-label="add"]');
-    addFeedButton.textContent = i18n.t('form.addFeed');
-
-    const urlInputLabel = elements.form.querySelector('label[for="url-input"]');
-    urlInputLabel.textContent = i18n.t('form.rssLink');
-
     const state = {
       form: {
         status: 'filling',
@@ -49,14 +43,14 @@ const app = () => {
 
     const watchedState = initView(state, elements, i18n);
 
+    setTimeout(() => updateFeeds(state, watchedState), 5000);
+
     elements.form.addEventListener('submit', (e) => {
       e.preventDefault();
       handleFormSubmit(e, state, watchedState, elements, i18n);
     });
 
-    initEvents(elements, watchedState);
-
-    setTimeout(() => updateFeeds(state, watchedState), 5000);
+    initControllers(state, watchedState, elements, i18n);
   });
 };
 

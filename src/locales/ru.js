@@ -2,8 +2,6 @@ export default {
   translation: {
     form: {
       success: 'RSS успешно загружен',
-      addFeed: 'Добавить в ленту',
-      rssLink: 'Ссылка RSS',
       errors: {
         notUniqueUrl: 'RSS уже существует',
         required: 'Не должно быть пустым',
@@ -14,16 +12,15 @@ export default {
       },
     },
     feeds: {
-      title: 'Фиды'
+      title: 'Фиды',
     },
     posts: {
       title: 'Посты',
-      noTitle: 'Без названия',
       viewButton: 'Просмотр',
     },
     modal: {
+      readMore: 'Читать полностью',
       close: 'Закрыть',
-      readFull: 'Читать полностью',
     },
   },
 };

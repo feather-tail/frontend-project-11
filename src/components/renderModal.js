@@ -7,30 +7,64 @@ const renderModal = (stateArg, elementsArg, i18n) => {
   const { postId } = uiState.modal;
 
   const post = posts.find((p) => p.id === postId);
-  if (!post) return;
+  if (!postId || !post) return;
 
-  const modalElement = modalContainer.querySelector('#modal');
-  const modalTitle = modalElement.querySelector('.modal-title');
-  const modalBody = modalElement.querySelector('.modal-body');
-  const fullLink = modalElement.querySelector('.full-article-link');
-  const closeButtons = modalElement.querySelectorAll('[data-bs-dismiss="modal"]');
-  const btnClose = modalElement.querySelector('.btn-close');
+  let modalElement = document.querySelector('#modal');
 
-  modalTitle.textContent = post.title;
-  modalBody.textContent = post.description;
+  if (!modalElement) {
+    modalElement = document.createElement('div');
+    modalElement.classList.add('modal', 'fade');
+    modalElement.id = 'modal';
+    modalElement.tabIndex = '-1';
+    modalElement.setAttribute('aria-labelledby', 'modal-title');
+    modalElement.setAttribute('aria-hidden', 'true');
 
-  fullLink.href = post.link;
-  fullLink.textContent = i18n.t('modal.readFull');
+    modalElement.innerHTML = `
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-title"></h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="${i18n.t('modal.close')}"
+            ></button>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <a
+              href="#"
+              class="btn btn-primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ${i18n.t('modal.readMore')}
+            </a>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              ${i18n.t('modal.close')}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
 
-  closeButtons.forEach((btn) => {
-    if (!btn.classList.contains('btn-close')) {
-      btn.textContent = i18n.t('modal.close');
-    }
-  });
+    modalContainer.appendChild(modalElement);
+  }
 
-  btnClose.setAttribute('aria-label', i18n.t('modal.close'));
+  const titleElement = modalElement.querySelector('.modal-title');
+  const bodyElement = modalElement.querySelector('.modal-body');
+  const linkElement = modalElement.querySelector('.modal-footer a');
 
-  const modal = new Modal(modalElement);
+  titleElement.textContent = post.title;
+  bodyElement.textContent = post.description;
+  linkElement.href = post.link;
+
+  const modal = Modal.getOrCreateInstance(modalElement);
   modal.show();
 };
 
