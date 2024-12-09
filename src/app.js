@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import initI18n from './i18n.js';
-import initView from './view.js';
+import initView from './components/view.js';
 import { updateFeeds } from './utils/updater.js';
 import handleFormSubmit from './utils/formHandler.js';
 

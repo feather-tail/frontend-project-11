@@ -1,7 +1,7 @@
 import onChange from 'on-change';
-import renderFeeds from './components/renderFeeds.js';
-import renderPosts from './components/renderPosts.js';
-import renderModal from './components/renderModal.js';
+import renderFeeds from './renderFeeds.js';
+import renderPosts from './renderPosts.js';
+import renderModal from './renderModal.js';
 
 const initView = (state, elements, i18n) => {
   const { input, feedback } = elements;
